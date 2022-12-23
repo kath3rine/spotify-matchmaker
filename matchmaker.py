@@ -158,7 +158,10 @@ if my_tempo_scl > 0.66 and their_tempo_scl > 0.66:
     traits.append("fast")
 elif my_tempo_scl < 0.33 and their_tempo_scl < 0.33:
     traits.append("slow")
-    
+
+# REDO THIS PART W/ DECISION TREES
+
+
 # computes compatibility scores from 0 to 1 (1 is most similar)
 def get_score(lst1, lst2):
     return (1 - abs(avg(lst1) - avg(lst2)))
