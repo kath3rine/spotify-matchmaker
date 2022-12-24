@@ -8,24 +8,30 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials( client
     client_secret='9a71c4a8a62043329a538ddcedd00e77',))
 
 features = ['id', 'title', 'danceability', 'energy', 'acousticness', 'mode', 'valence', 'loudness', 'tempo', 'liveness', 'key', 'instrumentalness', 'likes']
+
 reduced_features = ['danceability', 'energy', 'acousticness', 'mode', 'valence', 'loudness', 'tempo', 'liveness', 'key', 'instrumentalness']
 
 # PREPARE USER1 DATA
-user1_name = 'kli-17'
+user1_name = input("Enter user 1's username: ")
+print()
 
 # songs they like
-user1_likes_pid = 'https://open.spotify.com/playlist/2T75XDoKsI4dCgPxMXz7KV?si=87fa7360a7e4407c'
+user1_likes_pid = input("Enter songs that user 1 likes: ")
 user1_likes_pid = user1_likes_pid.split('playlist/')[1]
 user1_likes_pid = user1_likes_pid.split('?')[0]
 
 user1_likes_data = sp.user_playlist(user1_name, user1_likes_pid, 'tracks')['tracks']
 user1_likes_ids = []
 user1_likes_titles = []
+user1_artists = []
 user1_likes_result = []
 
 for track in user1_likes_data['items']:
     user1_likes_ids.append(track['track']['id'])
     user1_likes_titles.append(track['track']['name'])
+    for artist in track['track']['artists']:
+        track_artist = artist['name']
+    user1_artists.append(track_artist)
     user1_likes_result.append(1)
 
 user1_likes_features = sp.audio_features(user1_likes_ids)
@@ -38,7 +44,8 @@ user1_likes_df = user1_likes_df[features]
 
 
 # songs they dislike
-user1_dislikes_pid = 'https://open.spotify.com/playlist/6Cf0jO8jFNkQYAd9QVtyZz?si=18052fbdf4384efd'
+user1_dislikes_pid = input("Enter songs that user 1 dislikes: ")
+print()
 user1_dislikes_pid = user1_dislikes_pid.split('playlist/')[1]
 user1_dislikes_pid = user1_dislikes_pid.split('?')[0]
 
@@ -64,19 +71,25 @@ frames = [user1_likes_df, user1_dislikes_df]
 user1_df = pd.concat(frames)
 
 # PREPARE USER2 DATA
-
-user2_pid = 'https://open.spotify.com/playlist/2MajKXDlY549dxlCwE5UDp?si=6e2799fb3da44e35'
+user2_name = input("Enter user 2's username: ")
+print()
+user2_pid = input("Enter songs user 2 likes: ")
+print()
 user2_pid = user2_pid.split('playlist/')[1]
 user2_pid = user2_pid.split('?')[0]
 
-user2_data = sp.user_playlist(user1_name, user2_pid, 'tracks')['tracks']
+user2_data = sp.user_playlist(user2_name, user2_pid, 'tracks')['tracks']
 user2_ids = []
 user2_titles = []
+user2_artists = []
 user2_result = []
 
 for track in user2_data['items']:
     user2_ids.append(track['track']['id'])
     user2_titles.append(track['track']['name'])
+    for artist in track['track']['artists']:
+        track_artist = artist['name']
+    user2_artists.append(track_artist)
     user2_result.append(1)
 
 user2_features = sp.audio_features(user2_ids)
@@ -95,6 +108,6 @@ y_test = user2_df['likes']
 
 dtc = DecisionTreeClassifier()
 dtc.fit(X_train, y_train)
-score = dtc.score(X_test, y_test)
-print(score)
+compatibility = dtc.score(X_test, y_test)
+
 
