@@ -110,4 +110,4 @@ dtc = DecisionTreeClassifier()
 dtc.fit(X_train, y_train)
 compatibility = dtc.score(X_test, y_test)
 
-
+print(user1_name + " and " + user2_name + " are " + str(compatibility * 100) + "% compatible\n")
