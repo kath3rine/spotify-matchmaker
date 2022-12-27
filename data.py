@@ -1,15 +1,15 @@
-from sklearn.tree import DecisionTreeClassifier
+import pandas as pd
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-import numpy as np
-import pandas as pd
+
+# EXTRACT AND ORGANIZE DATA
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials( client_id='30680164aa8a48eb8d6b1a6e1469f0fa', 
     client_secret='9a71c4a8a62043329a538ddcedd00e77',))
 
 features = ['id', 'title', 'danceability', 'energy', 'acousticness', 'mode', 'valence', 'loudness', 'tempo', 'liveness', 'key', 'instrumentalness', 'likes']
 
-reduced_features = ['danceability', 'energy', 'acousticness', 'mode', 'valence', 'loudness', 'tempo', 'liveness', 'key', 'instrumentalness']
+
 
 # PREPARE USER1 DATA
 user1_name = input("Enter user 1's username: ")
@@ -100,14 +100,6 @@ user2_df['likes'] = user2_result
 
 user2_df = user2_df[features]
 
-# CLASSIFIER
-X_train = user1_df[reduced_features]
-y_train = user1_df['likes']
-X_test = user2_df[reduced_features]
-y_test = user2_df['likes']
 
-dtc = DecisionTreeClassifier()
-dtc.fit(X_train, y_train)
-compatibility = dtc.score(X_test, y_test)
 
-print(user1_name + " and " + user2_name + " are " + str(compatibility * 100) + "% compatible\n")
+
